@@ -9,81 +9,27 @@ class InicioComponent extends Component {
 
 
     constructor() {
-
         super()
         this.state = {
-            user: '',
-            paradas: []
+            user: '', 
+            paradas: [],
+            loading: true
         }
 
         state = {
             text: ''
         };
 
-
-
-        //    AsyncStorage.setItem('user', 'aranza');
-
         AsyncStorage.getItem('user', (err, result) => {
             if (err)
                 console.log("error");
             else {
                 this.setState({
-                    user: result
+                    user: JSON.parse(result)
                 })
             }
         });
-
-        console.log(this.state.user)
     }
-
-    onClearArray = () => {
-        this.setState({ paradas: [] });
-    };
-
-
-    componentDidMount() {
-        console.log("Montando componente")
-        // fetch("http://mapas.valencia.es/lanzadera/opendata/aparcabicis/JSON")
-        fetch("https://data.lab.fiware.org//dataset/de72a0fb-5f50-4483-8f66-827fae17cea1/resource/e1ee9956-0796-4357-bf0c-53f398c6db20/download/valenciavalenbisi.json")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState({
-                        isLoaded: true,
-                        items: result.items
-                    });
-                    result.features.forEach(element => this.storeData(element))
-                    console.log(this.state.paradas)
-                },
-
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
-                    console.log("Error fetching JSON")
-                }
-            )
-    }
-
-    storeData(element) {
-        let geometry = element.geometry;
-        let properties = element.properties;
-        // console.log(element.geometry.coordinates[0])
-        //    console.log(element.geometry.coordinates)
-        let parada = {
-            coordenadas: geometry.coordinates,
-            address: properties.address,
-            available: properties.available,
-            free: properties.free,
-            number: properties.number,
-            total: properties.total
-        }
-        this.state.paradas.push(parada)
-    }
-
-    
 
     render() {
         return (
@@ -113,8 +59,8 @@ class InicioComponent extends Component {
         this.setState({
             user: this.state.text
         })
-        // this.setState({ user: text })
     }
+
 
     showLogin() {
         if ((this.state.user === '') || (!this.state.user) || (this.state.user == null) || (this.state.user === "")) {
@@ -125,6 +71,7 @@ class InicioComponent extends Component {
                     <TextInput
                         style={styles.input}
                         placeholder="Nombre"
+                        clearButtonMode="always"
                         label='Nombre'
                         value={this.state.text}
                         onChangeText={text => this.setState({ text })}
@@ -139,8 +86,6 @@ class InicioComponent extends Component {
                             <Text style={{ fontWeight: 'bold', color: '#ffffff' }}> Enviar </Text>
                         </TouchableOpacity>
                     </View>
-
-
                 </View>
             )
         }
@@ -150,9 +95,10 @@ class InicioComponent extends Component {
                     <Text style={styles.bienvenida}>Bienvenid@ {this.state.user}!</Text>
                     <Button
                         title="Acceder "
-                        onPress={() => this.props.navigation.navigate('Principal')}
+                        onPress={() => {
+                            this.props.navigation.navigate("Mapa", { params: { to: 1900 } });
+                        }}
                         style={styles.saveButtonText}
-
                     />
 
                     <Button
