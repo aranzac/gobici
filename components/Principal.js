@@ -1,40 +1,28 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View, Button, Dimensions, TouchableOpacity, TextInput, Image, ActionButton } from 'react-native';
-import MapView, { Polyline, Marker } from 'react-native-maps';
-
+import { Text, StyleSheet, View, Button, Dimensions, TouchableOpacity } from 'react-native';
+import { MaterialCommunityIcons } from 'react-native-vector-icons';
+import MapView, { Marker } from 'react-native-maps';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import { TouchableHighlight } from 'react-native-gesture-handler';
-import { createStackNavigator } from '@react-navigation/stack';
 
 const Tab = createBottomTabNavigator();
 
-const regionProvisional = {
-    latitude: 39.490000,
-    longitude: -0.381944,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421
-}
 export default class PrincipalComponent extends Component {
 
     state = {
         initialRegion: {
-            latitude: 39.466941,
-            longitude: -0.375342,
+            latitude: 39.468947,
+            longitude: -0.372153,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
         },
         paradas: [],
-        loading: true
+        loading: true,
+        show: false
     }
-
 
     constructor(props) {
         super(props)
-
         this.getCurrentLocation()
-
-
     }
 
     // Converts numeric degrees to radians
@@ -74,14 +62,11 @@ export default class PrincipalComponent extends Component {
     }
 
 
-
     componentDidMount() {
-        let variable = ''
-        // if(this.props.route.params.paradas.route.params.paradas)
+
         this.setState({
             loading: 'false'
         })
-        console.log("Montando componente")
         // fetch("http://mapas.valencia.es/lanzadera/opendata/aparcabicis/JSON")
         fetch("https://data.lab.fiware.org//dataset/de72a0fb-5f50-4483-8f66-827fae17cea1/resource/e1ee9956-0796-4357-bf0c-53f398c6db20/download/valenciavalenbisi.json")
             .then(res => res.json())
@@ -91,12 +76,11 @@ export default class PrincipalComponent extends Component {
                         isLoaded: true,
                         items: result.items
                     });
+
                     result.features.forEach(element => this.storeData(element))
                     this.setState({
                         loading: 'false'
                     })
-                    console.log("mostrando")
-
                 },
                 (error) => {
                     this.setState({
@@ -105,8 +89,7 @@ export default class PrincipalComponent extends Component {
                     });
                     console.log("Error fetching JSON")
                 }
-            )
-
+            ) 
     }
 
     storeData(element) {
@@ -119,16 +102,13 @@ export default class PrincipalComponent extends Component {
             available: properties.available,
             free: properties.free,
             total: properties.total,
-            distancia: this.distance(regionProvisional.latitude, regionProvisional.longitude, element.geometry.coordinates[1], element.geometry.coordinates[0], 'K').toFixed(2),
+            distancia: this.distance(this.state.initialRegion.latitude, this.state.initialRegion.longitude, element.geometry.coordinates[1], element.geometry.coordinates[0], 'K').toFixed(2),
             proporcion: (properties.available * 100 / properties.total).toFixed(0)
         }
-        // Math.round(num * 100) /
-
 
         // if (this.state.paradas.length < 3) //Provisional
-        this.state.paradas.push(parada)
-
-
+        var aux = {key: parada._id, parada: parada}
+        this.state.paradas.push(aux)
     }
 
 
@@ -143,16 +123,16 @@ export default class PrincipalComponent extends Component {
                 // };
 
                 let region = {
-                    latitude: parseFloat(39.489994),
-                    longitude: parseFloat(-0.381950),
+                    latitude: parseFloat(this.state.initialRegion.latitude),
+                    longitude: parseFloat(this.state.initialRegion.longitude),
                     latitudeDelta: 0.01,
                     longitudeDelta: 0.01
                 }
-                console.log(region);
                 this.setState({
-                    initialRegion: region
+                    initialRegion: region,
+                    show: 'true'
                 });
-                this.mapView.animateToRegion(region, 2000);
+                this.mapView.animateToRegion(region, 1500);
             },
             error => console.log(error),
             {
@@ -161,44 +141,114 @@ export default class PrincipalComponent extends Component {
                 maximumAge: 1000
             }
         );
+        return ( 
+            <Marker
+
+                coordinate={{
+                    latitude: this.state.initialRegion.latitude,
+                    longitude: this.state.initialRegion.longitude
+                }}
+                title={'casa de aran'}
+
+            >
+            
+
+            </Marker> )
+    }
+
+    color(item, bicis) {
+        var prop = item.proporcion
+
+        if (prop == 'NaN')
+            return 'lightgrey'
+        if (!bicis) {
+            prop = 100 - prop
+        }
+        else if (prop <= 25)
+            return 'tomato'
+        else if (prop < 50)
+            return 'orange'
+        else if (prop <= 100)
+            return 'yellowgreen'
     }
 
 
     showMarkers() {
-        // console.log("tam " + this.state.paradas.length)
         if (this.state.loading === 'false') {
             return (
                 this.state.paradas.map(marker => (
-                    <View>
 
-                        <Marker
-                            key={marker._id}
-                            coordinate={{
-                                latitude: marker.coordenadas.latitud,
-                                longitude: marker.coordenadas.longitud
-                            }}
-                            title={marker.address}
-                            description={marker.distancia + 'km'}
-                            onPress={() => {
-                                this.props.navigation.navigate("Detalle", { parada: marker });
-                            }}
-                        >
-                            {/* <View style={styles.cone}>
-                                <Text>{marker.available}</Text>
-                            </View> */}
-                            <Image
-                                source={require('./../assets/rosa-min.png')}
-                                style={styles.imagen}
-                            />
+                    <Marker
+                        key={marker.parada._id}
+                        coordinate={{
+                            latitude: marker.parada.coordenadas.latitud,
+                            longitude: marker.parada.coordenadas.longitud
+                        }}
+                        title={marker.parada.address}
+                     
+                        onPress={() => {
+                            this.props.navigation.navigate("Detalle", { parada: marker.parada });
+                        }}
+                    >
 
-                        </Marker>
-                    </View>
+                        <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{
+                                width: 38, height: 25,
+                                backgroundColor: this.color(marker.parada,true),
+                                borderTopLeftRadius: 3,
+                                borderBottomLeftRadius: 3,
+                                borderWidth: 1,
+                                borderColor: 'lightgrey',
+                            }}>
+                                <Text style={{
+                                    alignSelf: 'center', alignContent: 'center', padding: 4, fontSize: 12, color: "white", fontWeight: "bold"
+                                }} >
+                                    <MaterialCommunityIcons style={{ alignSelf: 'flex-start', padding: 10 }} name="bike" color="white" size={13} />
+                                    {marker.parada.available}
+                                </Text>
+                            </View>
+                            <View style={{
+                                width: 38,
+                                height: 25,
+                                backgroundColor: this.color(marker.parada,false),
+                                borderTopRightRadius: 3,
+                                borderBottomRightRadius: 3,
+                                borderWidth: 1,
+                                borderColor: 'lightgrey',
+
+                            }}>
+                                <Text style={{
+                                    alignSelf: 'center', alignContent: 'center', padding: 4, fontSize: 12, color: "white", fontWeight: "bold"
+                                }} >
+                                    <MaterialCommunityIcons style={{ alignSelf: 'flex-start', padding: 10 }} name="anchor" color="white" size={13} />
+                                    {marker.parada.free}
+                                </Text>
+                            </View>
+                        </View>
+
+
+                    </Marker>
 
                 ))
             )
         }
     }
 
+
+    showPosition(){
+        (this.state.loading === 'true')
+        return(<Marker
+
+            coordinate={{
+                latitude: this.state.initialRegion.latitude,
+                longitude: this.state.initialRegion.longitude
+            }}
+            title={'Tu ubicación'}
+        >
+        
+
+        </Marker>)
+    }
 
 
     render() {
@@ -210,22 +260,7 @@ export default class PrincipalComponent extends Component {
                     <MapView style={styles.mapStyle} showsUserLocation={true} followUserLocation={true} zoomEnabled={true} initialRegion={this.state.initialRegion} ref={ref => (this.mapView = ref)}>
                         {this.showMarkers()}
                         <View>
-
-                            <Marker
-
-                                coordinate={{
-                                    latitude: '39.490000',
-                                    longitude: '-0.381944'
-                                }}
-                                title={'casa de aran'}
-
-                            >
-                                {/* <Image
-                                    source={require('./../assets/rosa-min.png')}
-                                    style
-                                /> */}
-
-                            </Marker>
+                        {this.showPosition()}
                         </View>
                     </MapView>
                     <View style={{ flex: 1, flexDirection: 'row-reverse' }}>
@@ -257,7 +292,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end' //for align to right
     }, callout: {
         flexDirection: 'row-reverse',
-        margin: 20
+        margin: 30
     },
     container: {
         flex: 1,
@@ -314,7 +349,7 @@ const styles = StyleSheet.create({
         top: 10,
         left: 10,
         zIndex: 10
-    },cone: {
+    }, cone: {
         width: 1,
         height: 1,
         borderLeftWidth: 17,
@@ -324,6 +359,20 @@ const styles = StyleSheet.create({
         borderTopWidth: 30,
         // borderTopColor: 'red',
         borderRadius: 17,
-        
-      }
+    },
+    izq: {
+        width: 25, height: 25, backgroundColor: 'green',
+        borderTopLeftRadius: 3,
+        borderBottomLeftRadius: 3,
+        borderWidth: 1,
+        borderColor: 'lightgrey'
+    },
+    der: {
+        width: 25, height: 25,
+        backgroundColor: 'orange',
+        borderTopRightRadius: 3,
+        borderBottomRightRadius: 3,
+        borderWidth: 1,
+        borderColor: 'lightgrey'
+    }
 });

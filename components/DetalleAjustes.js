@@ -49,7 +49,6 @@ class DetalleAjustesComponent extends Component {
         this.setUser();
         this.Input.current.clear();
 
-        console.log(this.state.text)
         AsyncStorage.setItem('user', JSON.stringify(this.state.text));
         AsyncStorage.getItem('user', (err, result) => {
             if (err)

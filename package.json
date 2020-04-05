@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "^5.0.45",
+    "@mdi/js": "^5.0.45",
     "@react-native-community/masked-view": "0.1.5",
     "@react-navigation/bottom-tabs": "^5.2.4",
     "@react-navigation/drawer": "^5.4.0",

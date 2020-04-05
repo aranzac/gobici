@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Platform, Share, Linking, View, Text, Button, Image, TouchableOpacity, TextInput, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions';
 import * as Sharing from 'expo-sharing';
 
 class CompartirComponent extends Component {
@@ -58,17 +56,12 @@ class CompartirComponent extends Component {
 
     openShareTextDialogAsync = async () => {
 
-            console.log(this.state.text)
-
             const result = await Share.share({
                 message: this.state.text,
             })
 
             this.Input.current.clear();
 
-           
-           
-      
     }
 
 
@@ -94,7 +87,7 @@ class CompartirComponent extends Component {
 
                     <View style={styles.panel2}>
                         <Text style={styles.texto}>
-                            Cuenta tu experencia con GoBici y compártelo con tus amigos
+                         Cuenta tu experencia con GoBici y compártelo con tus amigos
                         </Text>
                         <TextInput
                             ref={this.Input}

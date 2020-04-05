@@ -10,7 +10,6 @@ class AjustesComponent extends Component {
 
     }
 
-
     getListViewItem = (item) => {  
         this.props.navigation.navigate(item.dest);
     }  
@@ -18,13 +17,6 @@ class AjustesComponent extends Component {
     render() {
         return (
             <View>
-                {/* <Button
-                    title="Mis datos"
-                    style={styles.button}
-                    onPress={() => {
-                        this.props.navigation.navigate("Misdatos", { name: "React Native by Example " });
-                    }}
-                /> */}
                 <FlatList
                     data={[
                         { key: 'Mis datos', icon: '', dest: 'Mis datos' },

@@ -1,6 +1,5 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import InicioComponent from './components/Inicio'
@@ -53,57 +52,9 @@ const Ajustes = () => (
 );
 
 
-let paradas = [];
-
-
-
-
-
-
-
-// // fetch("http://mapas.valencia.es/lanzadera/opendata/aparcabicis/JSON")
-// fetch("https://data.lab.fiware.org//dataset/de72a0fb-5f50-4483-8f66-827fae17cea1/resource/e1ee9956-0796-4357-bf0c-53f398c6db20/download/valenciavalenbisi.json")
-//   .then(res => res.json())
-//   .then(
-//     (result) => {
-//       console.log("_______________________________________________")
-
-//       result.features.forEach(element => storeData(element))
-//       // console.log("____________")
-//       // console.log(paradas[0])
-//       // console.log("____________")
-//     },
-//     (error) => {
-//       this.setState({
-//         isLoaded: true,
-//         error
-//       });
-//       console.log("Error fetching JSON")
-//     }
-//   )
-
-
-  var updatedData = "valor inicial"
-
-// function callbackFunction(childData) {
-//   console.log("se ha obtenido -- " + childData)
-//   updatedData = childData
-//   return childData
-// }
-
-function callbackFunction(childData) {
-  console.log("se ha obtenido -- " + childData)
-  updatedData = childData
-  return childData
-}
-
-function getEstado(){
-  return updatedData
-}
-
 export default function App() {
 
-
+  console.disableYellowBox = true;
   const TabsScreen = (route) => (
     <Tabs.Navigator tabBarOptions={{
       activeTintColor: '#e91e63',
@@ -119,26 +70,7 @@ export default function App() {
             <MaterialCommunityIcons name="map" color={color} size={26} />
           ),
         }} />
-      {/* <Tabs.Screen
-        name="Mapa"
-        component={PrincipalComponent}
-        // initialParams={{ paradas: route}}
-        options={{
-          tabBarLabel: 'Mapa',
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="map" color={color} size={26} />
-          ),
-        }} /> */}
-      {/* <Tabs.Screen
-        name="Paradas"
-        component={Paradas}
-        // initialParams={{ paradas: route }}
-        options={{
-          tabBarLabel: 'Paradas',
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="map-marker" color={color} size={26} />
-          ),
-        }} /> */}
+    
       <Tabs.Screen
         name="Compartir"
         component={Compartir}
@@ -174,14 +106,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

@@ -3,8 +3,6 @@ import { View, Text, StyleSheet, FlatList, Alert, Header, Button, TouchableOpaci
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 class ParadasComponent extends Component {
 
-
-
     state = {
         paradas: {},
         loading: true,
@@ -35,11 +33,11 @@ class ParadasComponent extends Component {
         if (this.props.route.params.params.paradas) {
             var clone = this.props.route.params.params.paradas.slice(0);
             clone.sort(function (a, b) {
-                return a.distancia - b.distancia;
+                return a.parada.distancia - b.parada.distancia;
             });
             this.setState({
                 paradas: this.props.route.params.params.paradas.sort(function (a, b) {
-                    return a._id - b._id;
+                    return a.parada._id - b.parada._id;
                 }),
                 loading: 'false',
                 ordenadas: clone.slice(0, 5),
@@ -49,7 +47,7 @@ class ParadasComponent extends Component {
     }
 
     getListViewItem = (item) => {
-        Alert.alert(item.address);
+        Alert.alert(item.parada.address);
     }
 
 
@@ -88,9 +86,9 @@ class ParadasComponent extends Component {
             else
                 contenido = this.state.desordenadas
             return (
-                <FlatList style={styles.flat} data={contenido} renderItem={({ item }) =>
-                    <TouchableOpacity style={styles.item} key={item._id}  onPress={() => {
-                        this.props.navigation.navigate("Detalle",  { parada: item } );
+                <FlatList style={styles.flat}  data={contenido} renderItem={({ item }) =>
+                    <TouchableOpacity style={styles.item} key={item.parada._id}  onPress={() => {
+                        this.props.navigation.navigate("Detalle",  { parada: item.parada } );
                     }}>
                         <View style={{
                             flex: 1,
@@ -98,10 +96,10 @@ class ParadasComponent extends Component {
                             justifyContent: 'space-between',
                         }}>
                             <View style={{ justifyContent: 'column',padding: 5,marginLeft: 5, maxWidth: '70%' }}>
-                                <Text style={{flexDirection: 'row', marginLeft: 2, marginBottom: 2, fontSize: 15 }}><MaterialCommunityIcons style={{ alignSelf: 'flex-start', padding: 10 }} name="bike" color={this.color(item, true)} size={19} /> {item.available}&nbsp; <MaterialCommunityIcons style={{ alignSelf: 'flex-start' }} name="anchor" color={this.color(item, false)} size={18} />{item.free}</Text>
-                                <Text>{item._id}. {item.address}</Text>  
+                                <Text style={{flexDirection: 'row', marginLeft: 2, marginBottom: 2, fontSize: 15 }}><MaterialCommunityIcons style={{ alignSelf: 'flex-start', padding: 10 }} name="bike" color={this.color(item.parada, true)} size={19} /> {item.parada.available}&nbsp; <MaterialCommunityIcons style={{ alignSelf: 'flex-start' }} name="anchor" color={this.color(item.parada, false)} size={18} />{item.parada.free}</Text>
+                                <Text>{item.parada._id}. {item.parada.address}</Text>  
                             </View>
-                            <Text style={styles.distance}>{item.distancia} km</Text>
+                            <Text style={styles.distance}>{item.parada.distancia} km</Text>
                         </View>
                     </TouchableOpacity>
                 } />
@@ -131,7 +129,7 @@ class ParadasComponent extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <TouchableOpacity style={{ backgroundColor: '#e0e0e0', padding: 20 }} onPress={() => { this.toggle() }}>
+                <TouchableOpacity style={{ backgroundColor: '#FFE1DF', padding: 20 }} onPress={() => { this.toggle() }}>
                     {this.mostrar()}
                 </TouchableOpacity>
                 {this.showParadas()}

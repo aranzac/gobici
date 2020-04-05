@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Image, Button, TextInput, SubmitButton, TouchableHighlight, Fragment, TouchableOpacity } from 'react-native';
-// import UserStore from './UserStore';
+import { Text, View, StyleSheet, Image, Button, TextInput, TouchableHighlight, Fragment, TouchableOpacity } from 'react-native';
 import { AsyncStorage } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
 class InicioComponent extends Component {
 
@@ -32,11 +29,15 @@ class InicioComponent extends Component {
     }
 
     render() {
+
         return (
             <View style={styles.container}>
+                <View style={{flexDirection: 'row'}}></View>
+                <Text style={styles.logo}>Go<Text style={styles.logo2}>Bici</Text></Text>
+
                 <Image
                     style={styles.imagen}
-                    source={require('./../assets/logo2.png')}
+                    source={require('./../assets/logoo2.png')}
                 />
                 {this.showLogin()}
             </View>
@@ -92,6 +93,7 @@ class InicioComponent extends Component {
         else {
             return (
                 <View style={styles.view}>
+
                     <Text style={styles.bienvenida}>Bienvenid@ {this.state.user}!</Text>
                     <Button
                         title="Acceder "
@@ -118,12 +120,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ffffff',
-        alignItems: 'center'
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        // alignItems: 'stretch',
     },
     imagen: {
         width: 150,
         height: 150,
-        marginTop: 120,
+        // marginTop: 120,
         borderRadius: 25,
         borderColor: '#fff'
     },
@@ -144,7 +149,8 @@ const styles = StyleSheet.create({
     },
     pretunta: {
         fontSize: 20,
-        marginTop: 25, fontWeight: 'bold',
+        marginTop: 25,
+         fontWeight: 'bold',
 
     }, saveButton: {
         borderWidth: 1,
@@ -158,7 +164,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 5,
         color: '#fff',
-        width: 70,
+        // width: ,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -175,5 +181,19 @@ const styles = StyleSheet.create({
     center: {
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    logo:{
+        fontSize: 50,   
+        fontWeight: 'bold',
+        color: '#333333',
+        fontFamily: 'KohinoorBangla-Semibold',
+        backgroundColor: '#ffffff',
+    },
+    logo2:{
+        fontSize: 50,   
+        fontWeight: 'bold',
+        color: '#FFAAA5',
+        fontFamily: 'KohinoorBangla-Semibold',
+        backgroundColor: '#ffffff',
     }
 });

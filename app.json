@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Blank Template",
+    "name": "GoBici - Aranza",
     "slug": "goBici",
     "privacy": "public",
     "sdkVersion": "36.0.0",
@@ -25,6 +25,14 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "android": {
+      "package": "es.uv.aranza.gobici2020",
+      "config": {
+      "googleMaps": {
+      "apiKey": "AIzaSyBGACm5xawXM7ewncmkaGiIpiz7k850pJo"
+      }
+      }
+      }
   }
 }

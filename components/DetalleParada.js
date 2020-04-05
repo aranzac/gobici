@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import { MaterialCommunityIcons } from 'react-native-vector-icons';
-
-
-
 class DetalleParadaComponent extends Component {
 
     state = {
@@ -19,7 +14,6 @@ class DetalleParadaComponent extends Component {
         this.setState({
             parada: this.props.route.params.parada
         })
-        console.log(this.props.route.params.parada.coordenadas.latitud)
     }
     render() {
         return (
