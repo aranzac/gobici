@@ -68,7 +68,8 @@ export default class PrincipalComponent extends Component {
             loading: 'false'
         })
         // fetch("http://mapas.valencia.es/lanzadera/opendata/aparcabicis/JSON")
-        fetch("https://data.lab.fiware.org//dataset/de72a0fb-5f50-4483-8f66-827fae17cea1/resource/e1ee9956-0796-4357-bf0c-53f398c6db20/download/valenciavalenbisi.json")
+        // fetch("https://data.lab.fiware.org//dataset/de72a0fb-5f50-4483-8f66-827fae17cea1/resource/e1ee9956-0796-4357-bf0c-53f398c6db20/download/valenciavalenbisi.json")
+        fetch("http://mapas.valencia.es/lanzadera/opendata/Valenbisi/JSON")
             .then(res => res.json())
             .then(
                 (result) => {
@@ -115,19 +116,19 @@ export default class PrincipalComponent extends Component {
     async getCurrentLocation() {
         await navigator.geolocation.getCurrentPosition(
             position => {
-                // let region = {
-                //     latitude: parseFloat(position.coords.latitude),
-                //     longitude: parseFloat(position.coords.longitude),
-                //     latitudeDelta: 0.01,
-                //     longitudeDelta: 0.01
-                // };
-
                 let region = {
-                    latitude: parseFloat(this.state.initialRegion.latitude),
-                    longitude: parseFloat(this.state.initialRegion.longitude),
+                    latitude: parseFloat(position.coords.latitude),
+                    longitude: parseFloat(position.coords.longitude),
                     latitudeDelta: 0.01,
                     longitudeDelta: 0.01
-                }
+                };
+
+                // let region = {
+                //     latitude: parseFloat(this.state.initialRegion.latitude),
+                //     longitude: parseFloat(this.state.initialRegion.longitude),
+                //     latitudeDelta: 0.01,
+                //     longitudeDelta: 0.01
+                // }
                 this.setState({
                     initialRegion: region,
                     show: 'true'
@@ -260,7 +261,7 @@ export default class PrincipalComponent extends Component {
                     <MapView style={styles.mapStyle} showsUserLocation={true} followUserLocation={true} zoomEnabled={true} initialRegion={this.state.initialRegion} ref={ref => (this.mapView = ref)}>
                         {this.showMarkers()}
                         <View>
-                        {this.showPosition()}
+                        {/* {this.showPosition()} */}
                         </View>
                     </MapView>
                     <View style={{ flex: 1, flexDirection: 'row-reverse' }}>
